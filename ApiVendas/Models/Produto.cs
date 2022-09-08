@@ -6,7 +6,7 @@
 
         public string descricao { get; set; }
 
-        public string estoque { get; set; }
+        public int estoque { get; set; }
 
         public decimal valor { get; set; }
     }

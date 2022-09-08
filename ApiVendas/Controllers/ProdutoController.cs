@@ -7,57 +7,56 @@ namespace ApiVendas.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ClienteController : ControllerBase
+    public class ProdutoController : ControllerBase
     {
-
-        //Esse metodo retorna uma lista de clientes 
+        //Esse metodo retorna uma lista de Produtos 
         [HttpGet]
-        public ActionResult<List<Cliente>> Get()
+        public ActionResult<List<Produto>> Get()
         {
-            var cliente = new Cliente()
+            var produto = new Produto()
             {
                 id = 1,
-                nome = "Diego",
-                email = "diego@gmail.com",
-                dataNascimento = DateTime.Now.AddYears(-20)
+                descricao = "Nootebook",
+                estoque = 2,
+                valor = 2499
             };
 
 
-            var cliente2 = new Cliente()
+            var produto2 = new Produto()
             {
                 id = 2,
-                nome = "Junior",
-                email = "junior@gmail.com",
-                dataNascimento = DateTime.Now.AddYears(-30)
+                descricao = "Teclado",
+                estoque = 12,
+                valor = 50
             };
 
-            var clientes = new List<Cliente>();
-            clientes.Add(cliente);
-            clientes.Add(cliente2);
+            var produtos = new List<Produto>();
+            produtos.Add(produto);
+            produtos.Add(produto2);
 
-            return clientes;
+            return produtos;
 
         }
 
-        //Busca um unico cliente pelo seu id
+        //Busca um unico Produto pelo seu id
         [HttpGet("{id}")]
-        public ActionResult<Cliente> Get(string id)
+        public ActionResult<Produto> Get(string id)
         {
-            var cliente = new Cliente()
+            var produto = new Produto()
             {
-                id = 1,
-                nome = "Matheus",
-                email = "matheus@gmail.com",
-                dataNascimento = DateTime.Now.AddYears(-25)
+                id = 3,
+                descricao = "Mouse",
+                estoque = 14,
+                valor = 50
             };
 
-            return cliente;
+            return produto;
         }
 
         //Retorna uma menssagem de que os dados foram salvos
 
         [HttpPost]
-        public ActionResult<ReturnResponse> Post([FromBody] Cliente request)
+        public ActionResult<ReturnResponse> Post([FromBody] Produto request)
         {
             var retorno = new ReturnResponse()
             {
@@ -68,9 +67,9 @@ namespace ApiVendas.Controllers
             return retorno;
         }
 
-        //Deleta um cliente 
+        //Deleta um Produto 
         [HttpPut]
-        public ActionResult<ReturnResponse> Put([FromBody] Cliente request)
+        public ActionResult<ReturnResponse> Put([FromBody] Produto request)
         {
             var retorno = new ReturnResponse()
             {
@@ -81,7 +80,7 @@ namespace ApiVendas.Controllers
             return retorno;
         }
 
-        //Deleta um cliente pelo id
+        //Deleta um Produto pelo id
         [HttpDelete("{id}")]
         public ActionResult<ReturnResponse> Delete(string id)
         {
