@@ -1,4 +1,5 @@
 ﻿using ApiVendas.Models;
+using ApiVendas.Repositories;
 using ApiVendas.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,29 +14,7 @@ namespace ApiVendas.Controllers
         [HttpGet]
         public ActionResult<List<Produto>> Get()
         {
-            var produto = new Produto()
-            {
-                id = 1,
-                descricao = "Nootebook",
-                estoque = 2,
-                valor = 2499
-            };
-
-
-            var produto2 = new Produto()
-            {
-                id = 2,
-                descricao = "Teclado",
-                estoque = 12,
-                valor = 50
-            };
-
-            var produtos = new List<Produto>();
-            produtos.Add(produto);
-            produtos.Add(produto2);
-
-            return produtos;
-
+            return ProdutoRepository.Buscar(0, "fe");
         }
 
         //Busca um unico Produto pelo seu id
