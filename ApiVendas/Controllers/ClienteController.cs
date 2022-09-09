@@ -1,20 +1,22 @@
-﻿using ApiVendas.Models;
+﻿using ApiVendas.Mapper;
+using ApiVendas.Models;
+using ApiVendas.Requests;
 using ApiVendas.Response;
-using Microsoft.AspNetCore.Http;
+using ApiVendas.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiVendas.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ClienteController : ControllerBase
+    public class ClienteRequestController : ControllerBase
     {
 
-        //Esse metodo retorna uma lista de clientes 
+        //Esse metodo retorna uma lista de ClienteRequests 
         [HttpGet]
         public ActionResult<List<Cliente>> Get()
         {
-            var cliente = new Cliente()
+            var Cliente = new Cliente()
             {
                 id = 1,
                 nome = "Diego",
@@ -22,8 +24,7 @@ namespace ApiVendas.Controllers
                 dataNascimento = DateTime.Now.AddYears(-20)
             };
 
-
-            var cliente2 = new Cliente()
+            var Cliente2 = new Cliente()
             {
                 id = 2,
                 nome = "Junior",
@@ -31,34 +32,36 @@ namespace ApiVendas.Controllers
                 dataNascimento = DateTime.Now.AddYears(-30)
             };
 
-            var clientes = new List<Cliente>();
-            clientes.Add(cliente);
-            clientes.Add(cliente2);
-
-            return clientes;
-
+            var ClienteResponses = new List<ClienteResponse>();
+            ClienteResponses.Add(ClienteMapper.Mapper(Cliente));
+            ClienteResponses.Add(ClienteMapper.Mapper(Cliente2));
+            
+            return Ok(ClienteResponses);
         }
 
-        //Busca um unico cliente pelo seu id
+        //Busca um unico ClienteResponse pelo seu id
         [HttpGet("{id}")]
-        public ActionResult<Cliente> Get(string id)
+        public ActionResult<ClienteResponse> Get(string id)
         {
-            var cliente = new Cliente()
+            var ClienteResponse = new ClienteResponse()
             {
-                id = 1,
+                id = "1",
                 nome = "Matheus",
                 email = "matheus@gmail.com",
-                dataNascimento = DateTime.Now.AddYears(-25)
+                dataNascimento = DateTime.Now.AddYears(-25).ToString()
             };
 
-            return cliente;
+            return ClienteResponse;
         }
 
         //Retorna uma menssagem de que os dados foram salvos
 
         [HttpPost]
-        public ActionResult<ReturnResponse> Post([FromBody] Cliente request)
+        public ActionResult<ReturnResponse> Post([FromBody] ClienteRequest request)
         {
+            var NovoCliente = ClienteMapper.Mapper(request);
+
+            var meuNovoCliente = ClienteMapper.Mapper(request);
             var retorno = new ReturnResponse()
             {
                 Code = 200,
@@ -68,9 +71,9 @@ namespace ApiVendas.Controllers
             return retorno;
         }
 
-        //Deleta um cliente 
+        //Deleta um ClienteRequest 
         [HttpPut]
-        public ActionResult<ReturnResponse> Put([FromBody] Cliente request)
+        public ActionResult<ReturnResponse> Put([FromBody] ClienteRequest request)
         {
             var retorno = new ReturnResponse()
             {
@@ -81,7 +84,7 @@ namespace ApiVendas.Controllers
             return retorno;
         }
 
-        //Deleta um cliente pelo id
+        //Deleta um ClienteRequest pelo id
         [HttpDelete("{id}")]
         public ActionResult<ReturnResponse> Delete(string id)
         {
