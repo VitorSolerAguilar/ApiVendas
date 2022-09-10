@@ -69,8 +69,10 @@ namespace ApiVendas.Controllers
 
         //Deleta um Produto pelo id
         [HttpDelete("{id}")]
-        public ActionResult<ReturnResponse> Delete(string id)
+        public ActionResult<ReturnResponse> Delete(int id)
         {
+            ProdutoRepository.Delete(id);
+
             var retorno = new ReturnResponse()
             {
                 Code = 200,

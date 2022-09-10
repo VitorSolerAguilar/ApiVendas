@@ -19,7 +19,15 @@ namespace ApiVendas.Repositories
             return orderDetail;
         }
 
-        
+        public static void Delete<T>(int id) where T : BaseModel
+        {
+            using (var connection = new SqlConnection("Server=.\\sqlexpress;Database=vendas;Trusted_Connection=True;"))
+            {
+                string query = $"select * from {typeof(T).Name} where id = @id";
+                var objeto = connection.Query<T>(query, new {id});
+                connection.Delete(objeto);
+            }
+        }
 
         public static void Command<T>(T objeto, bool editar = false, object parameter = null) where T : BaseModel
         {

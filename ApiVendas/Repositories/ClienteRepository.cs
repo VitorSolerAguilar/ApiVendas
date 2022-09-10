@@ -9,6 +9,11 @@ namespace ApiVendas.Repositories
             BaseRepository.Command(Cliente);
         }
 
+        public static void Delete(int id)
+        {
+            BaseRepository.Delete<Produto>(id);
+        }
+
         public static void Atualizar(Cliente Cliente)
         {
             BaseRepository.Command(Cliente, true);

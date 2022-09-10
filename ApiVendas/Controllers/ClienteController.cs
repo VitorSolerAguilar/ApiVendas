@@ -1,5 +1,6 @@
 ﻿using ApiVendas.Mapper;
 using ApiVendas.Models;
+using ApiVendas.Repositories;
 using ApiVendas.Requests;
 using ApiVendas.Response;
 using ApiVendas.Responses;
@@ -86,8 +87,10 @@ namespace ApiVendas.Controllers
 
         //Deleta um ClienteRequest pelo id
         [HttpDelete("{id}")]
-        public ActionResult<ReturnResponse> Delete(string id)
+        public ActionResult<ReturnResponse> Delete(int id)
         {
+            ClienteRepository.Delete(id);
+
             var retorno = new ReturnResponse()
             {
                 Code = 200,

@@ -1,4 +1,5 @@
 ﻿using ApiVendas.Models;
+using ApiVendas.Repositories;
 using ApiVendas.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -85,8 +86,10 @@ namespace ApiVendas.Controllers
 
         //Deleta um Pedido pelo id
         [HttpDelete("{id}")]
-        public ActionResult<ReturnResponse> Delete(string id)
+        public ActionResult<ReturnResponse> Delete(int id)
         {
+            PedidoRepository.Delete(id);
+
             var retorno = new ReturnResponse()
             {
                 Code = 200,
