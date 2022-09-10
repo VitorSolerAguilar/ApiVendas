@@ -19,6 +19,8 @@ namespace ApiVendas.Repositories
             return orderDetail;
         }
 
+        
+
         public static void Command<T>(T objeto, bool editar = false, object parameter = null) where T : BaseModel
         {
             using (var connection = new SqlConnection("Server=.\\sqlexpress;Database=vendas;Trusted_Connection=True;"))
