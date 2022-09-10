@@ -2,9 +2,9 @@
 {
     public class ProdutoRequest
     {
-        public string id { get; set; }
+        public int id { get; set; }
         public string descricao { get; set; }
-        public string estoque { get; set; }
-        public string valor { get; set; }
+        public int estoque { get; set; }
+        public decimal valor { get; set; }
     }
 }

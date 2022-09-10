@@ -1,4 +1,6 @@
-﻿using Dapper;
+﻿using ApiVendas.Models;
+using Dapper;
+using Dapper.Contrib.Extensions;
 using System.Data.SqlClient;
 
 namespace ApiVendas.Repositories
@@ -15,6 +17,21 @@ namespace ApiVendas.Repositories
             }
 
             return orderDetail;
+        }
+
+        public static void Command<T>(T objeto, bool editar = false, object parameter = null) where T : BaseModel
+        {
+            using (var connection = new SqlConnection("Server=.\\sqlexpress;Database=vendas;Trusted_Connection=True;"))
+            {
+                if (editar)
+                {
+                    connection.Update(objeto);
+                }
+                else
+                {
+                    connection.Insert(objeto);
+                }
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace ApiVendas.Models
 {
-    public class PedidoItem
+    public class PedidoItem : BaseModel
     {
         public int id { get; set; }
 

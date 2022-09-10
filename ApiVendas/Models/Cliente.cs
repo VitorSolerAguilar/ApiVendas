@@ -1,6 +1,6 @@
 ﻿namespace ApiVendas.Models
 {
-    public class Cliente
+    public class Cliente : BaseModel
     {
         public int id { get; set; }
 

@@ -1,7 +1,12 @@
-﻿namespace ApiVendas.Models
+﻿
+using Dapper.Contrib.Extensions;
+
+namespace ApiVendas.Models
 {
-    public class Produto
+    [Table("produto")]
+    public class Produto : BaseModel
     {
+        [ExplicitKey]
         public int id { get; set; }
 
         public string descricao { get; set; }
