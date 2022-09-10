@@ -4,9 +4,9 @@ namespace ApiVendas.Requests
 {
     public class PedidoItemRequest
     {
-        public string id { get; set; }
-        public string quantidade { get; set; }
-        public string valorUnitario { get; set; }
+        public int id { get; set; }
+        public int quantidade { get; set; }
+        public decimal valorUnitario { get; set; }
         public Produto Produto { get; set; }
     }
 }
