@@ -1,6 +1,9 @@
-﻿using ApiVendas.Models;
+﻿using ApiVendas.Mapper;
+using ApiVendas.Models;
 using ApiVendas.Repositories;
+using ApiVendas.Requests;
 using ApiVendas.Response;
+using ApiVendas.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,56 +15,31 @@ namespace ApiVendas.Controllers
     {
         //Esse metodo retorna uma lista de pedidos 
         [HttpGet]
-        public ActionResult<List<Pedido>> Get()
+        public ActionResult<List<PedidoResponse>> Get()
         {
-            var Pedido = new Pedido()
-            {
-                numeroPedido = 1,
-                Cliente = new Cliente(),
-                data = DateTime.Now,
-                tipo = "V",
-                Itens = new List<PedidoItem>()
-            };
+            var PedidoGet = PedidoRepository.Buscar().Select(p => PedidoMapper.Mapper(p));
 
-
-            var Pedido2 = new Pedido()
-            {
-                numeroPedido = 2,
-                Cliente = new Cliente(),
-                data = DateTime.Now,
-                tipo = "V",
-                Itens = new List<PedidoItem>()
-            };
-
-            var pedidos = new List<Pedido>();
-            pedidos.Add(Pedido);
-            pedidos.Add(Pedido2);
-
-            return pedidos;
-
+            return PedidoGet.ToList();
         }
+
 
         //Busca um unico Pedido pelo seu id
         [HttpGet("{numeroPedido}")]
-        public ActionResult<Pedido> Get(string numeroPedidoid)
+        public ActionResult<PedidoResponse> Get(int numeroPedido)
         {
-            var Pedido = new Pedido()
-            {
-                numeroPedido = 3,
-                Cliente = new Cliente(),
-                data = DateTime.Now,
-                tipo = "V",
-                Itens = new List<PedidoItem>()
-            };
+            var PedidoId = PedidoMapper.Mapper(PedidoRepository.Buscar(numeroPedido).FirstOrDefault());
 
-            return Pedido;
+            return PedidoId;
         }
 
         //Retorna uma menssagem de que os dados foram salvos
-
         [HttpPost]
-        public ActionResult<ReturnResponse> Post([FromBody] Pedido request)
+        public ActionResult<ReturnResponse> Post([FromBody] PedidoRequest request)
         {
+            var NovoPedido = PedidoMapper.Mapper(request);
+
+            PedidoRepository.Gravar(NovoPedido);
+
             var retorno = new ReturnResponse()
             {
                 Code = 200,
@@ -73,8 +51,12 @@ namespace ApiVendas.Controllers
 
         //Deleta um Pedido 
         [HttpPut]
-        public ActionResult<ReturnResponse> Put([FromBody] Pedido request)
+        public ActionResult<ReturnResponse> Put([FromBody] PedidoRequest request)
         {
+            var AtualizarPedido = PedidoMapper.Mapper(request);
+
+            PedidoRepository.Atualizar(AtualizarPedido);
+
             var retorno = new ReturnResponse()
             {
                 Code = 200,

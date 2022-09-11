@@ -1,4 +1,7 @@
 ﻿using ApiVendas.Models;
+using ApiVendas.Response;
+using Dapper;
+using System.Data.SqlClient;
 
 namespace ApiVendas.Repositories
 {
@@ -11,7 +14,7 @@ namespace ApiVendas.Repositories
 
         public static void Delete(int id)
         {
-            BaseRepository.Delete<Produto>(id);
+            BaseRepository.Delete<Pedido>(id);
         }
 
         public static void Atualizar(Pedido Pedido)
@@ -19,29 +22,51 @@ namespace ApiVendas.Repositories
             BaseRepository.Command(Pedido, true);
         }
 
-        public static List<Pedido> Buscar(int id = 0, string descicao = "")
+        public static List<Pedido> Buscar(int numeroPedido = 0, int clienteId = 0)
         {
-            string sql = "select * from Pedido";
+            string sql = @" select p.numeroPedido,
+                                   p.data, 
+                                   p.tipo,
+                                   p.idClientes,
+                                   c.id,
+                                   c.nome,
+                                   c.email,
+                                   c.dataNascimento
+                                   from Pedido p 
+                                   join Cliente c on p.idClientes = c.id";
 
-            if (id > 0)
+            if (numeroPedido > 0)
             {
-                sql += " where id = @idPedido";
+                sql += " where numeroPedido = @numeroPedido";
             }
 
-            if (!string.IsNullOrEmpty(descicao))
+            if (clienteId > 0)
             {
                 if (sql.Contains("where"))
                 {
-                    sql += " and descricao like @descricaoPedido";
+                    sql += " and idClientes = @idClientes";
                 }
                 else
                 {
-                    sql += " where descricao like @descricaoPedido";
+                    sql += " where idClientes = @idClientes";
                 }
             }
 
-            var retorno = BaseRepository.QuerySql<Pedido>(sql, new { idPedido = id, descricaoPedido = "%" + descicao + "%" });
-            return retorno;
+            List<Pedido> orderDetail;
+
+            using (var connection = new SqlConnection(BaseRepository.ConnectionString))
+            {
+                orderDetail = connection.Query<Pedido, Cliente, Pedido>(sql, map: mapPropriedades, splitOn: "id", param: new { numeroPedido = numeroPedido, idClientes = clienteId }).ToList();
+            }
+
+            return orderDetail;
+        }
+
+        private static Pedido mapPropriedades(Pedido pedido, Cliente cliente)
+        {
+            pedido.Cliente = cliente;
+
+            return pedido;
         }
     }
 }

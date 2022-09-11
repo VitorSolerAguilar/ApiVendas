@@ -21,7 +21,7 @@ namespace ApiVendas.Mapper
         {
             return new PedidoResponse()
             {
-                numeroPedido = Pedido.numeroPedido.ToString(),
+                numeroPedido = Pedido.numeroPedido,
                 data = Pedido.data.ToString(),
                 tipo = Pedido.tipo.ToString(),
                 Cliente = Pedido.Cliente
