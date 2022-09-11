@@ -10,59 +10,35 @@ namespace ApiVendas.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ClienteRequestController : ControllerBase
+    public class ClienteController : ControllerBase
     {
 
         //Esse metodo retorna uma lista de ClienteRequests 
         [HttpGet]
-        public ActionResult<List<Cliente>> Get()
+        public ActionResult<List<ClienteResponse>> Get()
         {
-            var Cliente = new Cliente()
-            {
-                id = 1,
-                nome = "Diego",
-                email = "diego@gmail.com",
-                dataNascimento = DateTime.Now.AddYears(-20)
-            };
+            var cliente = ClienteRepository.Buscar().Select(c => ClienteMapper.Mapper(c));
 
-            var Cliente2 = new Cliente()
-            {
-                id = 2,
-                nome = "Junior",
-                email = "junior@gmail.com",
-                dataNascimento = DateTime.Now.AddYears(-30)
-            };
-
-            var ClienteResponses = new List<ClienteResponse>();
-            ClienteResponses.Add(ClienteMapper.Mapper(Cliente));
-            ClienteResponses.Add(ClienteMapper.Mapper(Cliente2));
-            
-            return Ok(ClienteResponses);
+            return cliente.ToList();
         }
 
         //Busca um unico ClienteResponse pelo seu id
         [HttpGet("{id}")]
-        public ActionResult<ClienteResponse> Get(string id)
+        public ActionResult<ClienteResponse> Get(int id)
         {
-            var ClienteResponse = new ClienteResponse()
-            {
-                id = "1",
-                nome = "Matheus",
-                email = "matheus@gmail.com",
-                dataNascimento = DateTime.Now.AddYears(-25).ToString()
-            };
+            var cliente = ClienteMapper.Mapper(ClienteRepository.Buscar(id).FirstOrDefault());
 
-            return ClienteResponse;
+            return cliente;
         }
 
         //Retorna uma menssagem de que os dados foram salvos
-
         [HttpPost]
         public ActionResult<ReturnResponse> Post([FromBody] ClienteRequest request)
         {
             var NovoCliente = ClienteMapper.Mapper(request);
 
-            var meuNovoCliente = ClienteMapper.Mapper(request);
+            ClienteRepository.Gravar(NovoCliente);
+
             var retorno = new ReturnResponse()
             {
                 Code = 200,
@@ -76,6 +52,11 @@ namespace ApiVendas.Controllers
         [HttpPut]
         public ActionResult<ReturnResponse> Put([FromBody] ClienteRequest request)
         {
+
+            var AtualizarCliente = ClienteMapper.Mapper(request);
+
+            ClienteRepository.Atualizar(AtualizarCliente);
+
             var retorno = new ReturnResponse()
             {
                 Code = 200,
