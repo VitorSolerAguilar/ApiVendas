@@ -7,11 +7,13 @@ namespace ApiVendas.Repositories
 {
     public static class BaseRepository
     {
+        public const string ConnectionString = "Server=.\\sqlexpress;Database=vendas;Trusted_Connection=True";
+
         public static List<T> QuerySql<T>(string sql, object parameter = null)
         {
             List<T> orderDetail;
 
-            using (var connection = new SqlConnection("Server=.\\sqlexpress;Database=vendas;Trusted_Connection=True;"))
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 orderDetail = connection.Query<T>(sql, parameter).ToList();
             }
@@ -21,9 +23,10 @@ namespace ApiVendas.Repositories
 
         public static void Delete<T>(int id) where T : BaseModel
         {
-            using (var connection = new SqlConnection("Server=.\\sqlexpress;Database=vendas;Trusted_Connection=True;"))
+            using (var connection = new SqlConnection(ConnectionString))
             {
-                string query = $"select * from {typeof(T).Name} where id = @id";
+                var tabela = typeof(T).Name;
+                string query = $"select * from {tabela} where {BuscaColunaChave(tabela)} = @id";
                 var objeto = connection.Query<T>(query, new {id});
                 connection.Delete(objeto);
             }
@@ -31,7 +34,7 @@ namespace ApiVendas.Repositories
 
         public static void Command<T>(T objeto, bool editar = false, object parameter = null) where T : BaseModel
         {
-            using (var connection = new SqlConnection("Server=.\\sqlexpress;Database=vendas;Trusted_Connection=True;"))
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 if (editar)
                 {
@@ -41,6 +44,23 @@ namespace ApiVendas.Repositories
                 {
                     connection.Insert(objeto);
                 }
+            }
+        }
+
+        private static string BuscaColunaChave(string nomeTabela)
+        {
+            string query = @"SELECT Col.Column_Name from 
+                             INFORMATION_SCHEMA.TABLE_CONSTRAINTS Tab, 
+                             INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE Col 
+                             WHERE 
+                             Col.Constraint_Name = Tab.Constraint_Name
+                             AND Col.Table_Name = Tab.Table_Name
+                             AND Constraint_Type = 'PRIMARY KEY'
+                             AND Col.Table_Name = @tablename";
+
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                return connection.Query<string>(query, new { tablename = nomeTabela }).FirstOrDefault();
             }
         }
     }

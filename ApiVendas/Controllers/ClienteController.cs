@@ -52,7 +52,6 @@ namespace ApiVendas.Controllers
         [HttpPut]
         public ActionResult<ReturnResponse> Put([FromBody] ClienteRequest request)
         {
-
             var AtualizarCliente = ClienteMapper.Mapper(request);
 
             ClienteRepository.Atualizar(AtualizarCliente);
