@@ -1,9 +1,8 @@
-﻿
-using Dapper.Contrib.Extensions;
+﻿using Dapper.Contrib.Extensions;
 
 namespace ApiVendas.Models
 {
-    [Table("produto")]
+    [Table("Produto")]
     public class Produto : BaseModel
     {
         [ExplicitKey]

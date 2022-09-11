@@ -1,12 +1,9 @@
 ﻿using ApiVendas.Mapper;
-using ApiVendas.Models;
 using ApiVendas.Repositories;
 using ApiVendas.Requests;
 using ApiVendas.Response;
 using ApiVendas.Responses;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 
 namespace ApiVendas.Controllers
 {

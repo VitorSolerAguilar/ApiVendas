@@ -11,7 +11,7 @@ namespace ApiVendas.Repositories
 
         public static void Delete(int id)
         {
-            BaseRepository.Delete<Produto>(id);
+            BaseRepository.Delete<Cliente>(id);
         }
 
         public static void Atualizar(Cliente Cliente)

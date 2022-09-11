@@ -1,7 +1,11 @@
-﻿namespace ApiVendas.Models
+﻿using Dapper.Contrib.Extensions;
+
+namespace ApiVendas.Models
 {
+    [Table("Pedido")]
     public class Pedido : BaseModel
     {
+        [ExplicitKey]
         public int numeroPedido { get; set; }
 
         public DateTime data { get; set; }
